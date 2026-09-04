@@ -1,1 +1,3 @@
 Patron Singleton: https://youtu.be/AnybkMlJntI
+
+Patron Factory Method: https://youtu.be/mbDHTm0Us9o
