@@ -1,5 +1,10 @@
 package com.motorjuegos.jugador;
 
+import com.motorjuegos.recompensa.Recompensa;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Jugador {
 
     private Long id;
@@ -9,15 +14,16 @@ public class Jugador {
     private Perfil perfil;
     private Estadisticas estadisticas;
 
+    private List<Recompensa> recompensas;
+
     public Jugador(Long id, String nombreUsuario, String correo) {
         this.id = id;
         this.nombreUsuario = nombreUsuario;
         this.correo = correo;
-
-        this.perfil = new Perfil();
         this.estadisticas = new Estadisticas();
+        this.perfil = new Perfil();
+        this.recompensas = new ArrayList<>();
     }
-
     // =========================
     // MÉTODOS
     // =========================
@@ -76,4 +82,19 @@ public class Jugador {
     public void setCorreo(String correo) {
         this.correo = correo;
     }
+
+    public void recibirRecompensa(Recompensa recompensa) {
+        recompensas.add(recompensa);
+
+        System.out.println(
+                nombreUsuario
+                        + " recibió la recompensa: "
+                        + recompensa.getNombre()
+        );
+    }
+
+    public List<Recompensa> getRecompensas() {
+        return recompensas;
+    }
+
 }

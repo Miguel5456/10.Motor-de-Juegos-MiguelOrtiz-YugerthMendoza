@@ -4,30 +4,24 @@ import com.motorjuegos.jugador.Jugador;
 import com.motorjuegos.partida.Partida;
 import com.motorjuegos.partida.ReglaJuego;
 import com.motorjuegos.ranking.Ranking;
-
-import java.util.List;
+import com.motorjuegos.recompensa.CreadorRecompensa;
+import com.motorjuegos.recompensa.CreadorRecompensaExperiencia;
+import com.motorjuegos.recompensa.CreadorRecompensaItem;
+import com.motorjuegos.recompensa.CreadorRecompensaMonedas;
+import com.motorjuegos.recompensa.Recompensa;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        System.out.println(
-                "========================================"
-        );
+        System.out.println("========================================");
+        System.out.println("     MOTOR DE JUEGOS MULTIJUGADOR");
+        System.out.println("========================================");
 
-        System.out.println(
-                "     MOTOR DE JUEGOS MULTIJUGADOR"
-        );
+        // Crear el motor
+        MotorJuego motor = new MotorJuego();
 
-        System.out.println(
-                "========================================"
-        );
-
-
-        // ==============================
-        // CREAR JUGADORES
-        // ==============================
-
+        // Crear jugadores
         Jugador jugador1 = new Jugador(
                 1L,
                 "PlayerOne",
@@ -46,101 +40,66 @@ public class Main {
                 "playerthree@gmail.com"
         );
 
+        // Registrar jugadores en el motor
+        motor.registrarJugador(jugador1);
+        motor.registrarJugador(jugador2);
+        motor.registrarJugador(jugador3);
 
-        // ==============================
-        // CREAR PARTIDA 1
-        // ==============================
-
+        // Crear regla de juego
         ReglaJuego regla = new ReglaJuego(
                 "Partida estándar",
                 "El jugador con mayor puntuación gana."
         );
 
-        Partida partida1 = new Partida(
-                1L,
-                "Partida #1",
-                4,
-                regla
-        );
+        // ================================
+        // RECOMPENSAS - FACTORY METHOD
+        // ================================
 
-        partida1.agregarJugador(jugador1);
-        partida1.agregarJugador(jugador2);
+      /*  CreadorRecompensa creadorMonedas =
+                new CreadorRecompensaMonedas();
 
-        partida1.iniciar();
+        Recompensa recompensaMonedas =
+                creadorMonedas.crearRecompensa(100);
 
-        partida1.finalizar(jugador1);
+        jugador1.recibirRecompensa(recompensaMonedas);
 
+        CreadorRecompensa creadorExperiencia =
+                new CreadorRecompensaExperiencia();
 
-        // ==============================
-        // CREAR PARTIDA 2
-        // ==============================
+        Recompensa recompensaExperiencia =
+                creadorExperiencia.crearRecompensa(50);
 
-        Partida partida2 = new Partida(
-                2L,
-                "Partida #2",
-                4,
-                regla
-        );
+        jugador1.recibirRecompensa(recompensaExperiencia);
 
-        partida2.agregarJugador(jugador1);
-        partida2.agregarJugador(jugador3);
+        CreadorRecompensa creadorItem =
+                new CreadorRecompensaItem();
 
-        partida2.iniciar();
+        Recompensa recompensaItem =
+                creadorItem.crearRecompensa(1);
 
-        partida2.finalizar(jugador3);
+        jugador1.recibirRecompensa(recompensaItem); */
 
+// ================================
+// SIMULACIÓN DE PARTIDAS
+// ================================
 
-        // ==============================
-        // CREAR PARTIDA 3
-        // ==============================
+        motor.simularPartidas(5, regla);
 
-        Partida partida3 = new Partida(
-                3L,
-                "Partida #3",
-                4,
-                regla
-        );
+        // ================================
+        // SINGLETON - RANKING
+        // ================================
 
-        partida3.agregarJugador(jugador1);
-        partida3.agregarJugador(jugador2);
+        Ranking ranking = Ranking.getInstancia();
 
-        partida3.iniciar();
-
-        partida3.finalizar(jugador1);
-
-
-// ==============================
-// OBTENER RANKING SINGLETON
-// ==============================
-
-        Ranking ranking =
-                Ranking.getInstancia();
-
-        Ranking otroRanking =
-                Ranking.getInstancia();
+        Ranking otroRanking = Ranking.getInstancia();
 
         System.out.println(
                 "\n¿Es la misma instancia? "
                         + (ranking == otroRanking)
         );
 
-// ==============================
-// ACTUALIZAR RANKING
-// ==============================
+        // Actualizar y mostrar ranking mediante el motor
 
-        ranking.actualizar(
-                List.of(
-                        jugador1,
-                        jugador2,
-                        jugador3
-                )
-        );
-
-
-// ==============================
-// MOSTRAR RANKING
-// ==============================
-
-        ranking.mostrar();
+        motor.mostrarRanking();
     }
 }

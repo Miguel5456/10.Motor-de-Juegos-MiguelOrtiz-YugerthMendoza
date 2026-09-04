@@ -110,6 +110,24 @@ public class Partida {
         );
     }
 
+    public Jugador simularGanador() {
+
+        if (estado != EstadoPartida.INICIADA) {
+            System.out.println("La partida no está activa.");
+            return null;
+        }
+
+        if (jugadores.size() < 2) {
+            System.out.println("No hay suficientes jugadores.");
+            return null;
+        }
+
+        int indiceGanador =
+                (int) (Math.random() * jugadores.size());
+
+        return jugadores.get(indiceGanador);
+    }
+
     public void pausar() {
 
         if (estado == EstadoPartida.INICIADA) {
