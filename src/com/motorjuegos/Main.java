@@ -1,14 +1,16 @@
 package com.motorjuegos;
 
+import com.motorjuegos.fabrica.FabricaJuego;
+import com.motorjuegos.fabrica.FabricaJuegoCasual;
 import com.motorjuegos.jugador.Jugador;
 import com.motorjuegos.partida.Partida;
 import com.motorjuegos.partida.ReglaJuego;
 import com.motorjuegos.ranking.Ranking;
-import com.motorjuegos.recompensa.CreadorRecompensa;
-import com.motorjuegos.recompensa.CreadorRecompensaExperiencia;
-import com.motorjuegos.recompensa.CreadorRecompensaItem;
-import com.motorjuegos.recompensa.CreadorRecompensaMonedas;
+import com.motorjuegos.partida.PartidaBuilder;
 import com.motorjuegos.recompensa.Recompensa;
+import com.motorjuegos.fabrica.FabricaJuegoCompetitiva;
+import com.motorjuegos.comunidad.Comunidad;
+
 
 public class Main {
 
@@ -45,45 +47,82 @@ public class Main {
         motor.registrarJugador(jugador2);
         motor.registrarJugador(jugador3);
 
+        // ================================
+// ABSTRACT FACTORY
+// ================================
+
+        FabricaJuego fabricaCasual =
+                new FabricaJuegoCasual();
+
+        FabricaJuego fabricaCompetitiva =
+                new FabricaJuegoCompetitiva();
+
         // Crear regla de juego
         ReglaJuego regla = new ReglaJuego(
                 "Partida estándar",
                 "El jugador con mayor puntuación gana."
         );
 
-        // ================================
-        // RECOMPENSAS - FACTORY METHOD
-        // ================================
-
-      /*  CreadorRecompensa creadorMonedas =
-                new CreadorRecompensaMonedas();
-
-        Recompensa recompensaMonedas =
-                creadorMonedas.crearRecompensa(100);
-
-        jugador1.recibirRecompensa(recompensaMonedas);
-
-        CreadorRecompensa creadorExperiencia =
-                new CreadorRecompensaExperiencia();
-
-        Recompensa recompensaExperiencia =
-                creadorExperiencia.crearRecompensa(50);
-
-        jugador1.recibirRecompensa(recompensaExperiencia);
-
-        CreadorRecompensa creadorItem =
-                new CreadorRecompensaItem();
-
-        Recompensa recompensaItem =
-                creadorItem.crearRecompensa(1);
-
-        jugador1.recibirRecompensa(recompensaItem); */
 
 // ================================
 // SIMULACIÓN DE PARTIDAS
 // ================================
 
         motor.simularPartidas(5, regla);
+
+        // ================================
+// ABSTRACT FACTORY - PARTIDA CASUAL
+// ================================
+        Partida partidaCasual =
+                motor.crearPartida(
+                        6L,
+                        "Partida Casual",
+                        4,
+                        fabricaCasual
+                );
+
+        partidaCasual.agregarJugador(jugador1);
+        partidaCasual.agregarJugador(jugador2);
+        partidaCasual.agregarJugador(jugador3);
+
+        motor.ejecutarPartida(partidaCasual, fabricaCasual);
+
+        // ================================
+// BUILDER - PARTIDA CONFIGURADA
+// ================================
+
+        Partida partidaBuilder =
+                motor.crearPartidaConBuilder(
+                        8L,
+                        "Partida Builder",
+                        4,
+                        regla
+                );
+
+        partidaBuilder.agregarJugador(jugador1);
+        partidaBuilder.agregarJugador(jugador2);
+        partidaBuilder.agregarJugador(jugador3);
+
+        motor.ejecutarPartida(partidaBuilder);
+
+
+        // ================================
+// ABSTRACT FACTORY - PARTIDA COMPETITIVA
+// ================================
+        Partida partidaCompetitiva =
+                motor.crearPartida(
+                        7L,
+                        "Partida Competitiva",
+                        4,
+                        fabricaCompetitiva
+                );
+
+        partidaCompetitiva.agregarJugador(jugador1);
+        partidaCompetitiva.agregarJugador(jugador2);
+        partidaCompetitiva.agregarJugador(jugador3);
+
+        motor.ejecutarPartida(partidaCompetitiva, fabricaCompetitiva);
+
 
         // ================================
         // SINGLETON - RANKING
@@ -101,5 +140,111 @@ public class Main {
         // Actualizar y mostrar ranking mediante el motor
 
         motor.mostrarRanking();
+
+        // ================================
+// ABSTRACT FACTORY - PRUEBA
+// ================================
+
+        System.out.println("\n===== PRUEBA ABSTRACT FACTORY =====");
+
+
+        ReglaJuego reglaCasual =
+                fabricaCasual.crearRegla();
+
+        Recompensa recompensaCasual =
+                fabricaCasual.crearRecompensa(30);
+
+        System.out.println(
+                "Regla creada: "
+                        + reglaCasual.getNombre()
+        );
+
+        System.out.println(
+                "Descripción: "
+                        + reglaCasual.getDescripcion()
+        );
+
+        recompensaCasual.entregar();
+
+        System.out.println("\n===== PRUEBA FABRICA COMPETITIVA =====");
+
+
+        ReglaJuego reglaCompetitiva =
+                fabricaCompetitiva.crearRegla();
+
+        Recompensa recompensaCompetitiva =
+                fabricaCompetitiva.crearRecompensa(50);
+
+        System.out.println(
+                "Regla creada: "
+                        + reglaCompetitiva.getNombre()
+        );
+
+        System.out.println(
+                "Descripción: "
+                        + reglaCompetitiva.getDescripcion()
+        );
+
+        recompensaCompetitiva.entregar();
+
+
+        // ================================
+// PROTOTYPE - COMUNIDAD
+// ================================
+
+        Comunidad comunidadOriginal =
+                new Comunidad(
+                        1L,
+                        "Gaming Colombia",
+                        "Comunidad para jugadores.",
+                        100
+                );
+
+        comunidadOriginal.agregarJugador(jugador1);
+        comunidadOriginal.agregarJugador(jugador2);
+
+        Comunidad comunidadClonada =
+                motor.crearComunidadConPrototype(
+                        comunidadOriginal
+                );
+
+        comunidadClonada.agregarJugador(jugador3);
+
+        System.out.println(
+                "\n===== PRUEBA PROTOTYPE ====="
+        );
+
+        System.out.println(
+                "Comunidad original: "
+                        + comunidadOriginal.getNombre()
+        );
+
+        System.out.println(
+                "Jugadores original: "
+                        + comunidadOriginal.getJugadores().size()
+        );
+
+        System.out.println(
+                "Comunidad clonada: "
+                        + comunidadClonada.getNombre()
+        );
+
+        System.out.println(
+                "Jugadores clonada: "
+                        + comunidadClonada.getJugadores().size()
+        );
+
+        System.out.println(
+                "¿Son la misma comunidad? "
+                        + (comunidadOriginal == comunidadClonada)
+        );
+
     }
+
+
+
+
+
 }
+
+
