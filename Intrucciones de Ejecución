@@ -1,0 +1,16 @@
+Requisitos
+- Java JDK 21.
+- IntelliJ IDEA.
+- Git.
+- Conexión a Internet.
+
+Pasos para descargar y ejecutar el proyecto
+
+1. Instalar los requisitos indicados anteriormente.
+2. Abrir una terminal o consola de comandos.
+3. Clonar el repositorio del proyecto utilizando Git.
+4. Abrir la carpeta del proyecto desde IntelliJ IDEA.
+5. Verificar que el proyecto utilice Java JDK 21.
+6. Buscar el archivo Main.java.
+7. Ejecutar el archivo Main.java.
+8. Verificar en la consola que el motor de juegos se ejecute correctamente y muestre los resultados de las funcionalidades implementadas.
