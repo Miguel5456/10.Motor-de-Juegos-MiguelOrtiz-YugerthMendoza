@@ -10,6 +10,13 @@ import com.motorjuegos.partida.PartidaBuilder;
 import com.motorjuegos.recompensa.Recompensa;
 import com.motorjuegos.fabrica.FabricaJuegoCompetitiva;
 import com.motorjuegos.comunidad.Comunidad;
+import com.motorjuegos.economia.AdaptadorPago;
+import com.motorjuegos.economia.PasarelaPagoExterna;
+import com.motorjuegos.economia.ProcesadorPago;
+import com.motorjuegos.chat.CanalChat;
+import com.motorjuegos.chat.CanalConsola;
+import com.motorjuegos.chat.MensajeChat;
+import com.motorjuegos.chat.MensajeSistema;
 
 
 public class Main {
@@ -239,12 +246,98 @@ public class Main {
                         + (comunidadOriginal == comunidadClonada)
         );
 
+
+// ================================
+// ADAPTER - MICROTRANSACCIÓN
+// ================================
+
+        PasarelaPagoExterna pasarela =
+                new PasarelaPagoExterna();
+
+        ProcesadorPago procesadorPago =
+                new AdaptadorPago(pasarela);
+
+        motor.procesarMicrotransaccion(
+                procesadorPago,
+                jugador1,
+                10000
+        );
+        motor.realizarCompra(
+                jugador1,
+                100,
+                5000,
+                procesadorPago
+        );
+        motor.realizarCompra(
+                jugador2,
+                250,
+                12000,
+                procesadorPago
+        );
+
+        // ================================
+// PRUEBA BRIDGE
+// ================================
+
+        CanalChat canalChat =
+                new CanalChat();
+
+        CanalConsola canalConsola =
+                new CanalConsola();
+
+        MensajeChat mensajeChat =
+                new MensajeChat(canalChat);
+
+        MensajeChat mensajeChatConsola =
+                new MensajeChat(canalConsola);
+
+        MensajeSistema mensajeSistema =
+                new MensajeSistema(canalChat);
+
+        MensajeSistema mensajeSistemaConsola =
+                new MensajeSistema(canalConsola);
+
+        mensajeChat.enviar(
+                "Hola jugadores."
+        );
+
+        mensajeChatConsola.enviar(
+                "Mensaje enviado por consola."
+        );
+
+        mensajeSistema.enviar(
+                "La partida comenzará pronto."
+        );
+
+        mensajeSistemaConsola.enviar(
+                "Servidor reiniciado correctamente."
+        );
+
+        // ================================
+// BRIDGE INTEGRADO AL MOTOR
+// ================================
+
+        motor.enviarMensaje(
+                mensajeChat,
+                "Bienvenidos a la partida."
+        );
+
+        motor.enviarMensaje(
+                mensajeSistema,
+                "La partida comenzará en 10 segundos."
+        );
+
+        motor.enviarMensaje(
+                mensajeChatConsola,
+                "Mensaje del jugador enviado por consola."
+        );
+
+        motor.enviarMensaje(
+                mensajeSistemaConsola,
+                "El servidor está funcionando correctamente."
+        );
+
     }
-
-
-
-
-
 }
 
 

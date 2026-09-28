@@ -12,6 +12,8 @@ import com.motorjuegos.recompensa.CreadorRecompensaExperiencia;
 import com.motorjuegos.fabrica.FabricaJuego;
 import com.motorjuegos.comunidad.Comunidad;
 import com.motorjuegos.partida.PartidaBuilder;
+import com.motorjuegos.economia.ProcesadorPago;
+import com.motorjuegos.chat.Mensaje;
 
 
 import java.util.ArrayList;
@@ -212,6 +214,51 @@ public class MotorJuego {
         recompensa.entregar();
     }
 
+    public void realizarCompra(
+            Jugador jugador,
+            int monedas,
+            double monto,
+            ProcesadorPago procesadorPago) {
+
+        System.out.println(
+                "\nProcesando compra de "
+                        + monedas
+                        + " monedas para "
+                        + jugador.getNombreUsuario()
+        );
+
+        procesadorPago.procesarPago(
+                jugador.getNombreUsuario(),
+                monto
+        );
+
+        System.out.println(
+                "Compra completada correctamente."
+        );
+    }
+
+    // ================================
+// ADAPTER - MICROTRANSACCIONES
+// ================================
+
+    public void procesarMicrotransaccion(
+            ProcesadorPago procesadorPago,
+            Jugador jugador,
+            double monto) {
+
+        procesadorPago.procesarPago(
+                jugador.getNombreUsuario(),
+                monto
+        );
+    }
+
+    public void enviarMensaje(
+            Mensaje mensaje,
+            String contenido) {
+
+        mensaje.enviar(contenido);
+    }
+
     public void actualizarRanking() {
         ranking.actualizar(jugadores);
     }
@@ -232,3 +279,4 @@ public class MotorJuego {
         return ranking;
     }
 }
+
