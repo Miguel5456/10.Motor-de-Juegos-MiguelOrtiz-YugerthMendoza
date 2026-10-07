@@ -14,6 +14,7 @@ import com.motorjuegos.comunidad.Comunidad;
 import com.motorjuegos.partida.PartidaBuilder;
 import com.motorjuegos.economia.ProcesadorPago;
 import com.motorjuegos.chat.Mensaje;
+import com.motorjuegos.comunidad.GrupoComunidad;
 
 
 import java.util.ArrayList;
@@ -143,6 +144,12 @@ public class MotorJuego {
 
             actualizarRanking();
         }
+    }
+
+    public void mostrarComunidad(
+            GrupoComunidad comunidad) {
+
+        comunidad.mostrar();
     }
 
     public void ejecutarPartida(

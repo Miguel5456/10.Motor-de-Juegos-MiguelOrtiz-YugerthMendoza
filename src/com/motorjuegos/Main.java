@@ -17,6 +17,12 @@ import com.motorjuegos.chat.CanalChat;
 import com.motorjuegos.chat.CanalConsola;
 import com.motorjuegos.chat.MensajeChat;
 import com.motorjuegos.chat.MensajeSistema;
+import com.motorjuegos.recompensa.Recompensa;
+import com.motorjuegos.recompensa.RecompensaBonoExperiencia;
+import com.motorjuegos.recompensa.RecompensaBonoEspecial;
+import com.motorjuegos.comunidad.GrupoComunidad;
+import com.motorjuegos.comunidad.JugadorComunidad;
+
 
 
 public class Main {
@@ -196,6 +202,59 @@ public class Main {
 
 
         // ================================
+// PRUEBA COMPOSITE
+// ================================
+
+        GrupoComunidad comunidadPrincipal =
+                new GrupoComunidad(
+                        "Gaming Colombia"
+                );
+
+        GrupoComunidad torneo =
+                new GrupoComunidad(
+                        "Torneo Nacional"
+                );
+
+        JugadorComunidad jugador1Composite =
+                new JugadorComunidad(
+                        "PlayerOne"
+                );
+
+        JugadorComunidad jugador2Composite =
+                new JugadorComunidad(
+                        "PlayerTwo"
+                );
+
+        JugadorComunidad jugador3Composite =
+                new JugadorComunidad(
+                        "PlayerThree"
+                );
+
+        torneo.agregar(
+                jugador3Composite
+        );
+
+        comunidadPrincipal.agregar(
+                jugador1Composite
+        );
+
+        comunidadPrincipal.agregar(
+                jugador2Composite
+        );
+
+        comunidadPrincipal.agregar(
+                torneo
+        );
+
+        System.out.println(
+                "\n===== PRUEBA COMPOSITE ====="
+        );
+
+        motor.mostrarComunidad(
+                comunidadPrincipal
+        );
+
+        // ================================
 // PROTOTYPE - COMUNIDAD
 // ================================
 
@@ -314,6 +373,29 @@ public class Main {
         );
 
         // ================================
+// PRUEBA DECORATOR
+// ================================
+
+        Recompensa recompensaBase =
+                new Recompensa(
+                        "Monedas",
+                        "Recompensa por ganar una partida.",
+                        50
+                );
+
+        RecompensaBonoExperiencia recompensaConXP =
+                new RecompensaBonoExperiencia(
+                        recompensaBase,
+                        20
+                );
+
+        System.out.println(
+                "\n===== PRUEBA DECORATOR ====="
+        );
+
+        recompensaConXP.entregar();
+
+        // ================================
 // BRIDGE INTEGRADO AL MOTOR
 // ================================
 
@@ -338,6 +420,8 @@ public class Main {
         );
 
     }
+
+
 }
 
 
