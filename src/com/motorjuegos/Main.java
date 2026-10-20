@@ -1,29 +1,39 @@
 package com.motorjuegos;
 
-import com.motorjuegos.fabrica.FabricaJuego;
-import com.motorjuegos.fabrica.FabricaJuegoCasual;
-import com.motorjuegos.jugador.Jugador;
-import com.motorjuegos.partida.Partida;
-import com.motorjuegos.partida.ReglaJuego;
-import com.motorjuegos.ranking.Ranking;
-import com.motorjuegos.partida.PartidaBuilder;
-import com.motorjuegos.recompensa.Recompensa;
-import com.motorjuegos.fabrica.FabricaJuegoCompetitiva;
-import com.motorjuegos.comunidad.Comunidad;
-import com.motorjuegos.economia.AdaptadorPago;
-import com.motorjuegos.economia.PasarelaPagoExterna;
-import com.motorjuegos.economia.ProcesadorPago;
 import com.motorjuegos.chat.CanalChat;
 import com.motorjuegos.chat.CanalConsola;
 import com.motorjuegos.chat.MensajeChat;
 import com.motorjuegos.chat.MensajeSistema;
-import com.motorjuegos.recompensa.Recompensa;
-import com.motorjuegos.recompensa.RecompensaBonoExperiencia;
-import com.motorjuegos.recompensa.RecompensaBonoEspecial;
+
+import com.motorjuegos.comunidad.Comunidad;
 import com.motorjuegos.comunidad.GrupoComunidad;
 import com.motorjuegos.comunidad.JugadorComunidad;
 
+import com.motorjuegos.economia.AdaptadorPago;
+import com.motorjuegos.economia.PasarelaPagoExterna;
+import com.motorjuegos.economia.ProcesadorPago;
 
+import com.motorjuegos.facade.MotorJuegoFacade;
+import com.motorjuegos.fabrica.FabricaJuego;
+import com.motorjuegos.fabrica.FabricaJuegoCasual;
+import com.motorjuegos.fabrica.FabricaJuegoCompetitiva;
+
+import com.motorjuegos.jugador.Jugador;
+import com.motorjuegos.partida.Partida;
+import com.motorjuegos.partida.ReglaJuego;
+import com.motorjuegos.ranking.Ranking;
+
+import com.motorjuegos.recompensa.Recompensa;
+import com.motorjuegos.recompensa.RecompensaBonoExperiencia;
+
+import com.motorjuegos.flyweight.Personaje;
+import com.motorjuegos.flyweight.PersonajeFactory;
+import com.motorjuegos.flyweight.TipoPersonaje;
+
+import com.motorjuegos.proxy.AccesoPartida;
+import com.motorjuegos.proxy.ProxyPartida;
+
+import java.util.Set;
 
 public class Main {
 
@@ -419,9 +429,112 @@ public class Main {
                 "El servidor está funcionando correctamente."
         );
 
+        // ================================
+        // PRUEBA FACADE
+        // ================================
+
+        System.out.println("\n===== PRUEBA FACADE =====");
+
+        MotorJuegoFacade facade = new MotorJuegoFacade(motor);
+
+        facade.mostrarRanking();
+
+        // ================================
+        // FACADE - INICIAR PARTIDA
+        // ================================
+
+        System.out.println("\n===== PRUEBA FACADE: PARTIDA =====");
+
+        FabricaJuego fabricaJuego = new FabricaJuegoCasual();
+
+        facade.iniciarPartida(
+                100L,
+                "Partida de prueba Facade",
+                4,
+                fabricaJuego
+        );
+
+        // ================================
+        // FACADE - COMPRA DE MONEDAS
+        // ================================
+
+        System.out.println("\n===== PRUEBA FACADE: COMPRA =====");
+
+        facade.comprarMonedas(
+                jugador1,
+                100,
+                5000,
+                procesadorPago
+        );
+
+
+        // ================================
+        // PRUEBA FLYWEIGHT
+        // ================================
+
+        System.out.println("\n===== PRUEBA FLYWEIGHT =====");
+
+        PersonajeFactory personajeFactory = new PersonajeFactory();
+
+        TipoPersonaje guerrero1 = personajeFactory.obtenerTipo(
+                "Guerrero",
+                "modelo_guerrero",
+                "Ataque cuerpo a cuerpo"
+        );
+
+        TipoPersonaje guerrero2 = personajeFactory.obtenerTipo(
+                "Guerrero",
+                "modelo_guerrero",
+                "Ataque cuerpo a cuerpo"
+        );
+
+        TipoPersonaje arquero = personajeFactory.obtenerTipo(
+                "Arquero",
+                "modelo_arquero",
+                "Ataque a distancia"
+        );
+
+        Personaje personaje1 = new Personaje(
+                "PlayerOne", 10, 20, guerrero1
+        );
+
+        Personaje personaje2 = new Personaje(
+                "PlayerTwo", 15, 25, guerrero2
+        );
+
+        Personaje personaje3 = new Personaje(
+                "PlayerThree", 30, 40, arquero
+        );
+
+        personaje1.mostrar();
+        personaje2.mostrar();
+        personaje3.mostrar();
+
+        System.out.println(
+                "¿Los guerreros comparten el mismo objeto? "
+                        + (guerrero1 == guerrero2)
+        );
+
+        System.out.println(
+                "Cantidad de tipos compartidos creados: "
+                        + personajeFactory.cantidadTiposCompartidos()
+        );
+
+
+        // ================================
+        // PRUEBA PROXY
+        // ================================
+
+        System.out.println("\n===== PRUEBA PROXY =====");
+
+        AccesoPartida proxy = new ProxyPartida(
+                "Partida competitiva",
+                Set.of("PlayerOne", "PlayerTwo")
+        );
+
+        proxy.consultarPartida("PlayerOne");
+        proxy.consultarPartida("PlayerThree");
+
+
     }
-
-
 }
-
-
